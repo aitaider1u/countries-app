@@ -1,0 +1,55 @@
+<!-- Carte d'identité du Pays -->
+<div class="country-profile m-3">
+  <!-- Drapeau et Nom -->
+  <div class="country-header ">
+    <img
+      [src]="country?.flags?.png"
+      [alt]="country?.name?.common"
+      class="country-flag"
+    />
+    <h1 class="country-name">🌍 {{ country?.name?.common }}</h1>
+    <h2 class="country-official-name">🏛️ {{ country?.name?.official }}</h2>
+  </div>
+
+  <!-- Informations Générales -->
+  <div class="country-info">
+    <p>📍 <strong>Capitale :</strong> {{ country?.capital?.[0] || 'Non disponible' }}</p>
+    <p>👥 <strong>Population :</strong> {{ country?.population || 0 | number }}</p>
+    <p>📏 <strong>Superficie :</strong> {{ country?.area || 0 | number }} km²</p>
+    <p>🕒 <strong>Fuseaux horaires :</strong></p>
+    <ul>
+      <li *ngFor="let timezone of timezones; trackBy: trackByValue">⏳ {{ timezone }}</li>
+    </ul>
+  </div>
+
+  <!-- Devises -->
+  <div class="country-currencies">
+    <h3>💱 <strong>Devises :</strong></h3>
+    <ul>
+      <li *ngFor="let currencyKey of currencyKeys; trackBy: trackByValue">
+        💵 {{ currencyKey }} : {{ country?.currencies[currencyKey]?.name }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Langues -->
+  <div class="country-languages">
+    <h3>🗣️ <strong>Langues :</strong></h3>
+    <ul>
+      <li *ngFor="let languageKey of languageKeys; trackBy: trackByValue">
+        🗨️ {{ languageKey }} : {{ country?.languages[languageKey] }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Carte -->
+  <div class="country-map" *ngIf="country?.latlng && country.latlng.length === 2">
+    <h3>🗺️ <strong>Carte du pays :</strong></h3>
+    <div id="map" class="leaflet-container"></div>
+  </div>
+
+  <!-- Avertissement si pas de coordonnées -->
+  <p class="warning" *ngIf="!country?.latlng?.length">
+    ❌ Les coordonnées GPS ne sont pas disponibles.
+  </p>
+</div>

@@ -1,0 +1,10 @@
+/* Modale - Fond sombre */
+.bg-opacity-50 {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Modale - Contenu */
+.max-h-screen {
+  max-height: 90vh;
+  overflow-y: auto;
+}

@@ -1,0 +1,49 @@
+<div class="flex relative h-full w-full flex-col">
+  <div class="flex-grow flex-col">
+    <h1 class="text-3xl font-mono max-sm:text-xl text-center my-6">🌍 Liste des Pays - Région : {{ name() }}</h1>
+    <h1 class="text-lg font-mono max-sm:text-sm text-center">{{ countries().length }} countries founded</h1>
+
+    <!-- Grille des Pays -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 p-4 m-r-5 m-l-5 mb-40">
+      @for (country of countries(); track country.name.common) {
+        <div
+          class="bg-slate-100 rounded-lg shadow-md overflow-hidden text-center p-4 hover:shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
+          (click)="selectCountry(country)"
+        >
+          @if (country.flags?.png) {
+            <img
+              [src]="country.flags.png"
+              [alt]="country.name.common"
+              class="w-24 h-16 mx-auto object-cover rounded-md"
+            />
+          }
+          <h3 class="mt-2 text-lg font-semibold">{{ country.name.common }}</h3>
+        </div>
+      }
+    </div>
+
+    <!-- Message si aucun pays n'est trouvé -->
+    @if (countries().length === 0) {
+      <div class="text-center text-gray-500 mt-8">
+        Aucun pays trouvé pour cette région.
+      </div>
+    }
+
+    <!-- Composant pour le bas de la page -->
+    <div class="fixed w-full bottom-0">
+      <app-region-list></app-region-list>
+    </div>
+  </div>
+
+  @if (selectedCountry) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 pt-5">
+      <div class="bg-white w-full max-w-3xl rounded-lg shadow-lg overflow-auto max-h-screen relative m-2">
+        <!-- Bouton de fermeture correctement positionné -->
+        <app-country-detail [country]="selectedCountry"></app-country-detail>
+        <div class=" flex justify-end m-5">
+          <button   (click)="selectedCountry = null" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Back to the List </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
