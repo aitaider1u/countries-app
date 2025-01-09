@@ -1,64 +1,51 @@
-import { Component, Input, AfterViewInit, PLATFORM_ID, Inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-country-detail',
   templateUrl: './country-detail.component.html',
   styleUrls: ['./country-detail.component.css'],
   standalone: true,
-  imports: [
-    CommonModule, // Pour *ngIf, *ngFor et les pipes
-  ]
+  imports: [CommonModule],
 })
-export class CountryDetailComponent implements AfterViewInit {
+export class CountryDetailComponent implements OnInit {
   @Input() country: any;
-  private map: any;
+  googleMapUrl: SafeResourceUrl | null = null;
 
-  // ✅ Ajouter les propriétés manquantes
   timezones: string[] = [];
   currencyKeys: string[] = [];
   languageKeys: string[] = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     if (this.country) {
-      // Initialiser les tableaux si les données sont présentes
       this.timezones = this.country?.timezones || [];
-      this.currencyKeys = this.country?.currencies ? Object.keys(this.country.currencies) : [];
-      this.languageKeys = this.country?.languages ? Object.keys(this.country.languages) : [];
+      this.currencyKeys = this.country?.currencies
+        ? Object.keys(this.country.currencies)
+        : [];
+      this.languageKeys = this.country?.languages
+        ? Object.keys(this.country.languages)
+        : [];
+
+      if (this.country?.latlng && this.country.latlng.length === 2) {
+        const [lat, lng] = this.country.latlng;
+        const url = `https://www.google.com/maps?q=${lat},${lng}&z=6&output=embed`;
+        this.googleMapUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      } else {
+        console.error('Coordonnées invalides ou manquantes.');
+      }
     }
   }
 
-  ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.loadLeaflet();
-    }
-  }
-
-  private async loadLeaflet() {
-    const L = await import('leaflet');
-
-    if (this.country?.latlng?.length === 2) {
-      this.map = L.map('map').setView(
-        [this.country.latlng[0], this.country.latlng[1]],
-        6
-      );
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(this.map);
-
-      L.marker([this.country.latlng[0], this.country.latlng[1]])
-        .addTo(this.map)
-        .bindPopup(`<b>${this.country.name.common}</b>`)
-        .openPopup();
-    }
-  }
-
-  // ✅ Méthode trackByValue pour optimiser *ngFor
+  /**
+   * Optimisation *ngFor avec trackBy
+   */
   trackByValue(index: number, item: any): any {
     return item;
   }

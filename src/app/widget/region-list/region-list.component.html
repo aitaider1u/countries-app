@@ -1,15 +1,35 @@
-<div class="flex h-28 max-sm:h-20 max-md:h-24 bg-slate-300 w-full  ">
-
-  <div [routerLink]="'/home'" class="h-full flex-1 flex justify-center items-center hover:bg-slate-800 space hover:text-gray-100 border-r-4 border-l-4  border-gray-200 max-sm:flex-col max-lg:flex-col">
-    <img class="h-3/6 max-sm:h-3/6" src="/assets/region/earth.png" alt="" srcset="">
-    <p class=" font-mono text-lg font-medium pl-3 max-sm:text-sm max-sm:hidden hover:border-gray-200" >world</p>
+<div class="flex h-28 max-sm:h-20 max-md:h-24 bg-slate-300 w-full">
+  <div
+    [routerLink]="'/home'"
+    class="h-full flex-1 flex justify-center items-center hover:bg-slate-800 space hover:text-gray-100 border-r-4 border-l-4 border-gray-200 max-sm:flex-col max-lg:flex-col"
+  >
+    <img
+      class="h-3/6 max-sm:h-3/6"
+      src="assets/region/earth.png"
+      alt=""
+      srcset=""
+    />
+    <p
+      class="font-mono text-lg font-medium pl-3 max-sm:text-sm max-sm:hidden hover:border-gray-200"
+    >
+      world
+    </p>
   </div>
 
   @for (region of regions; track region.name) {
-    <div [routerLink]="'/region/' + region.name" class="h-full flex-1 flex justify-center items-center hover:bg-slate-800 space  border-r-4 hover:text-gray-100 border-gray-200 max-sm:flex-col max-lg:flex-col">
-      <img class="h-3/6 max-sm:h-3/6" src="/assets/region/{{region.name}}.png" alt="" srcset="">
-      <p class=" font-mono text-lg font-medium pl-3 max-sm:text-sm max-sm:hidden " >{{region.name}}</p>
-    </div>
+  <div
+    [routerLink]="'/region/' + region.name"
+    class="h-full flex-1 flex justify-center items-center hover:bg-slate-800 space border-r-4 hover:text-gray-100 border-gray-200 max-sm:flex-col max-lg:flex-col"
+  >
+    <img
+      class="h-3/6 max-sm:h-3/6"
+      src="assets/region/{{ region.name }}.png"
+      alt=""
+      srcset=""
+    />
+    <p class="font-mono text-lg font-medium pl-3 max-sm:text-sm max-sm:hidden">
+      {{ region.name }}
+    </p>
+  </div>
   }
-
 </div>
